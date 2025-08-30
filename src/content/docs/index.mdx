@@ -1,17 +1,18 @@
 ---
-title: Welcome to Starlight
+title: KubeJS解説へようこそ
 description: Get started building your docs site with Starlight.
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: KubeJSは全てを解決する。しかし残念ながら公式Wikiの内容は薄く日本語非対応なので作っていく。ついでにアドオンも触る
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/kjs.png
   actions:
-    - text: Example Guide
+    - text: 早速始める
       link: /guides/example/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+	
+    - text: Kube.js公式Wiki
+      link: https://kubejs.com/wiki
       icon: external
       variant: minimal
 ---
@@ -21,16 +22,12 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 ## Next steps
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+	<Card title="解説について" icon="pencil">
+		解説の追加要望や修正案はこの解説ページが置かれている<a href="#">GithubのIssue</a>へ送る
 	</Card>
 	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+		starlight.astroが使われているので<a href="#">template</a>を使って作ってもらって<a href="#">pullrequest</a>を送っても可
+		
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+
 </CardGrid>
