@@ -1,12 +1,14 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-// defineConfig の手前で宣言する
-const isCI = Boolean(process.env.GITHUB_ACTIONS);
-// https://astro.build/config
-export default defineConfig({
-  site: 'https://okhu-mc.github.io',
-  base: isCI ? '/KubeJS-Notebook' : '/',
+
+// defineConfig の引数をアロー関数にする（({ command }) => { ... })
+export default defineConfig(({ command }) => {
+  // command には Astro から 'dev' または 'build' という文字列が自動で入る
+  const isBuild = command === 'build';
+  return {
+    site: 'https://okhu-mc.github.io',
+    base: isBuild ? '/KubeJS-Notebook' : '/',
 
 	integrations: [
 		starlight({
@@ -40,4 +42,5 @@ export default defineConfig({
 			],
 		}),
 	],
-});
+}});
+
