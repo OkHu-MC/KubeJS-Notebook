@@ -2,11 +2,11 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 // defineConfig の手前で宣言する
-const isProd = process.env.GITHUB_ACTIONS === 'true';
+const isCI = Boolean(process.env.GITHUB_ACTIONS);
 // https://astro.build/config
 export default defineConfig({
   site: 'https://okhu-mc.github.io',
-  base: isProd ? '/KubeJS-Notebook' : '/',
+  base: isCI ? '/KubeJS-Notebook' : '/',
 
 	integrations: [
 		starlight({
