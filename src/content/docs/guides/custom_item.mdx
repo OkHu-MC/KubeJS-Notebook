@@ -1,0 +1,55 @@
+---
+title: アイテム・ブロック・ツールの追加 (Startup Scripts)
+description: KubeJSを使った新しいオリジナルアイテム、ブロック、ツールの登録方法です。
+sidebar:
+  order: 6
+---
+import { Steps } from '@astrojs/starlight/components';
+
+要素の新規追加処理は、ゲーム起動時に読み込まれる `kubejs/startup_scripts/` 配下で行います。
+
+:::caution[注意]
+`startup_scripts` を変更・追加した場合は、`/kubejs reload` では反映されません。**マイクラ本体（クライアント）の再起動**が必要です。
+:::
+
+---
+
+## 1. カスタムアイテムの追加
+
+```javascript
+ // startup_scripts/custom_items.js StartupEvents.registry('item', event => {   // レジストリID: kubejs:ruby   event.create('ruby')     .displayName('ルビー')     .texture('kubejs:item/ruby') // kubejs/assets/kubejs/textures/item/ruby.png を参照 })
+  ```
+
+---
+
+## 2. カスタムブロックの追加
+
+```javascript
+ // startup_scripts/custom_blocks.js 
+ StartupEvents.registry('block', event => {   // レジストリID: kubejs:ruby_block   event.create('ruby_block')     .displayName('ルビーブロック')     .material('metal')     .hardness(5.0)     .resistance(6.0)     .requiresTool(true)     .tagBlock('mineable/pickaxe') // ツルハシで採掘可能     .tagBlock('needs_iron_tool')  // 鉄ツール適正 }) 
+```
+
+---
+
+## 3. カスタムツールの追加 (剣・ツルハシなど)
+
+---
+```javascript 
+// startup_scripts/custom_tools.js
+StartupEvents.registry('item', event => {   // 剣の追加
+   event.create('ruby_sword', 'sword')
+   .displayName('ルビーの剣')     
+   .tier('diamond')            // ダイヤモンド級の耐久値     
+   .attackDamageBaseline(6.0)  // 基本攻撃力    
+   // 
+   
+// ツルハシの追加   
+    event.create('ruby_pickaxe', 'pickaxe')
+    .displayName('ルビーのツルハシ')     
+    .tier('iron') }) 
+
+```
+
+---
+
+この形式なら、各ブロック右上に出てくるコピーボタンでそのまま中身を取得できます！

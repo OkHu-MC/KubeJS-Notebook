@@ -1,40 +1,31 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: KubeJS解説へようこそ
+description: KubeJSの日本語解説ドキュメントサイトです。
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: KubeJSは全てを解決する。しかし残念ながら公式Wikiの内容は薄く日本語非対応なので作っていく。ついでにアドオンも触る
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/kjs.png
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: 早速始める
+      link: KubeJS-Notebook/guides/setup/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+      variant: primary
+    - text: KubeJS公式Wiki
+      link: https://kubejs.com/wiki
       icon: external
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## 今後のステップ・貢献方法
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+  <Card title="解説について" icon="pencil">
+    解説の追加要望や修正案は、この解説ページが置かれている [GitHubのIssue](https://github.com/OkHu-MC/KubeJS-Notebook/issues) へお送りください。
+  </Card>
+  <Card title="コンテンツの追加（PR歓迎）" icon="add-document">
+    Starlightで構築されているため、既存ページを参考に修正・追加を行い、[Pull Request](https://github.com/OkHu-MC/KubeJS-Notebook/pulls) を送っていただくことも可能です！
+  </Card>
 </CardGrid>

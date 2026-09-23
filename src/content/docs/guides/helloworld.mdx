@@ -1,0 +1,72 @@
+
+---
+title: KubeJSを実際に使ってみる (Hello World)
+description: 初回起動時のフォルダ構成、GameDashboardでのログ確認、クライアント/サーバー側でのHello World出力手順です。
+sidebar:
+  order: 3
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+KubeJSを導入したら、まずはスクリプトが正しく読み込まれているか「Hello World」を出力して確認してみましょう。
+
+---
+
+## 1. 初回起動と準備
+
+KubeJSを導入した状態でマイクラを**初回起動**すると、設定ファイルやスクリプト配置用のフォルダが自動生成されます。
+
+:::note[GameDashboard（ログ画面）について]
+ゲーム起動時、マイクラ本体とは別に **GameDashboard**（ログウィンドウ）が出現します。
+スクリプトのログ出力（`console.info`）やエラーを確認する際は、基本的にこの画面を使用します。
+:::
+
+---
+
+## 2. コンソールに Hello World する（Client Scripts）
+
+初回起動後、以下のパスにあるサンプルファイルを確認します。
+
+`curseforge/minecraft/Instances/<プロジェクト名>/kubejs/client_scripts/example.js`
+
+デフォルトでは以下のコードが記述されています。
+
+```javascript
+// priority: 0
+
+// Visit the wiki for more info - [https://kubejs.com/](https://kubejs.com/)
+
+console.info('Hello, World! (Loaded client scripts)')
+```
+マイクラを起動すると、GameDashboard（ログ画面）に Hello, World! (Loaded client scripts) と出力されていることが確認できます。
+
+3. チャット欄に Hello World する（Server Scripts）
+次は、ゲーム内のチャット欄へメッセージを赤字で出力してみます。
+
+ファイルパス:
+```
+curseforge/minecraft/Instances/<プロジェクト名>/kubejs/server_scripts/example.js
+```
+スクリプトの記述
+以下のコードを server_scripts/example.js に貼り付けて保存します。
+
+```javascript
+let flag = 0;
+
+ServerEvents.tick(event => {
+    // 20 ticks = 1秒（起動から1秒後に実行）
+    if (flag == 20) {
+        event.server.runCommandSilent('tellraw @a {"text":"Hello, World! tick event!","color":"red"}');
+    }
+    flag = flag + 1;
+});
+
+// 本来は loaded イベントで動作するはずですが、環境によって動作が不安定な場合があるため
+// 確実に実行できる tick イベント（タイマー処理）を採用しています。
+// ServerEvents.loaded(event => {
+//     event.server.runCommandSilent('tellraw @a {"text":"Hello, World!","color":"green"}');
+// });
+```
+:::tip[即時リロードコマンド]
+ファイルを保存した後、ワールド内で /kubejs reload server_scripts コマンドを実行（またはワールドを再読み込み）すると、ゲームを再起動せずにスクリプトが適用されます。
+:::

@@ -1,0 +1,43 @@
+---
+title: レシピの追加 (Server Scripts)
+
+description: 定形レシピ（4マス・9マス）および不定形レシピの追加方法です。
+sidebar:
+  order: 4
+
+---
+import { Steps } from '@astrojs/starlight/components';
+
+
+
+レシピの変更・追加はすべて `kubejs/server_scripts/` 配下のスクリプトで行います。
+
+---
+
+## 1. 定形レシピ（Shaped Recipe）
+
+配列の文字パターンでクラフト時の配置を指定します。
+
+### ① 4マス（2x2）レシピ：深層岩の丸石からレバー
+
+```javascript
+ ServerEvents.recipes(event => {   event.shaped('minecraft:lever', [     'A',     'B'   ], {     A: 'minecraft:cobbled_deepslate',     B: 'minecraft:stick'   }) }) 
+ ```
+
+### ② 9マス（3x3）レシピ：深層岩からリピーター
+
+```javascript
+ ServerEvents.recipes(event => {   event.shaped('minecraft:repeater', [     'TRT',     'SSS'   ], {     T: 'minecraft:redstone_torch',     R: 'minecraft:redstone',     S: 'minecraft:deepslate'   }) })
+  ```
+
+---
+
+## 2. 不定形レシピ（Shapeless Recipe）
+
+グリッドの配置に関わらず、指定した素材が揃えばクラフト可能です。
+
+### ダイヤモンド2個 -> エメラルド1個
+
+```javascript 
+ServerEvents.recipes(event => {   event.shapeless('minecraft:emerald', [     'minecraft:diamond',     'minecraft:diamond'   ]) }) 
+```
