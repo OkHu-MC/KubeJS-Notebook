@@ -1,14 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
+// defineConfig の手前で宣言する
+const isProd = process.env.GITHUB_ACTIONS === 'true';
 // https://astro.build/config
 export default defineConfig({
-	// 1. 自身のGitHub PagesのURL（ユーザー名に変更）
   site: 'https://okhu-mc.github.io',
-  
-  // 2. リポジトリ名（<username>.github.io というリポジトリ名で公開するなら不要）
-  base: '/KubeJS-Notebook',
+  base: isProd ? '/KubeJS-Notebook' : '/',
 
 	integrations: [
 		starlight({
