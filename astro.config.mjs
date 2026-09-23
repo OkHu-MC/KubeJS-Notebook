@@ -2,13 +2,9 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-// defineConfig の引数をアロー関数にする（({ command }) => { ... })
-export default defineConfig(({ command }) => {
-  // command には Astro から 'dev' または 'build' という文字列が自動で入る
-  const isBuild = command === 'build';
-  return {
+export default defineConfig({
     site: 'https://okhu-mc.github.io',
-    base: isBuild ? '/KubeJS-Notebook' : '/',
+    base: '/KubeJS-Notebook',
 
 	integrations: [
 		starlight({
@@ -42,5 +38,5 @@ export default defineConfig(({ command }) => {
 			],
 		}),
 	],
-}});
+});
 
