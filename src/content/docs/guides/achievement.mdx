@@ -1,5 +1,5 @@
 ---
-title: 実績の追加 (Startup Scripts)
+title: 実績の追加 (Server Scripts)
 description: KubeJSを使った新しい実績の登録方法です。
 sidebar:
   order: 7
@@ -325,7 +325,20 @@ ServerEvents.highPriorityData(event => {
 
 ```
 
+:::tip[実績ファイルの置き場について]
+KubeJSで実績を追加・変更する方法は主に**2通り**あります。
 
+
+1. **`kubejs/data/<namespace>/advancements/` に `.json` ファイルを直接置く（おすすめ）**  
+   * VS Code等のエディタでJSONの文法補完やエラーチェックが効くため、書き間違いを防止できます。  
+2. **`kubejs/server_scripts/` 内で `event.addJson` を使う（このページで解説する方法）**  
+   * スクリプト内でループ処理（`for` 文等）を用いて大量の実績を自動生成したい場合や、KubeJSスクリプトと同一ファイルで管理したい場合に便利です。  
+
+どちらの方法で作成しても、ゲーム内で **`/reload`** コマンドを実行すれば再起動なしで即座に反映されます！  
+~作者はaddJsonの方が好きです(もっと言えば、jsonにしろaddJsonでスクリプト書くにしろ、条件文の所はデタパで実績追加の仕方とか調べた方が良いかもしれません)~
+
+
+:::
 
 
 
