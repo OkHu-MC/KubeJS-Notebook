@@ -1,0 +1,75 @@
+---
+title: ディレクトリの一覧
+description: KubeJSのディレクトリの一覧です。
+sidebar:
+  order: 4
+---
+
+## ディレクトリ一覧
+現在把握している範囲のディレクトリ一覧です
+
+```
+kubejs/
+├── assets/                     # 【リソースパック枠】クライアント側（見た目・音）
+│   └── <namespace>/            # ID空間（例: kubejs, mymod）
+│       ├── blockstates/        # ブロックの状態・モデルマッピング (.json)
+│       ├── font/               # カスタムフォント設定 (.json)
+│       ├── lang/               # 言語・翻訳ファイル (ja_jp.json, en_us.json など)
+│       ├── models/             # 3Dモデル定義
+│       │   ├── block/          # ブロックモデル (.json)
+│       │   └── item/           # アイテムモデル (.json)
+│       ├── particles/          # パーティクル設定 (.json)
+│       ├── sounds/             # カスタム効果音ファイル (.ogg)
+│       ├── textures/           # テクスチャ画像
+│       │   ├── block/          # ブロックテクスチャ (.png)
+│       │   ├── item/           # アイテムテクスチャ (.png)
+│       │   ├── gui/            # GUI用テクスチャ (.png)
+│       │   └── mob_effect/     # ステータス効果アイコン (.png)
+│       └── sounds.json         # 効果音の登録・定義ファイル
+│
+├── data/                       # 【データパック枠】サーバー側（ゲームロジック・定義）
+│   └── <namespace>/            # ID空間（例: kubejs, minecraft, 他MODのID）
+│       ├── advancements/       # 実績・進捗の定義 (.json)
+│       ├── functions/          # mcfunction スクリプト (.mcfunction)
+│       ├── loot_tables/        # ドロップテーブル定義 (.json)
+│       │   ├── blocks/         # ブロック破壊時のドロップ
+│       │   ├── entities/       # モブ倒した時のドロップ
+│       │   └── chests/         # チェスト生成時の戦利品
+│       ├── recipes/            # バニラ・MOD形式のレシピ定義 (.json)
+│       ├── structures/         # ストラクチャーファイル (.nbt)
+│       └── tags/               # タグ定義 (.json)
+│           ├── blocks/         # ブロックタグ
+│           ├── items/          # アイテムタグ
+│           └── entity_types/   # エンティティタグ
+│
+├── client_scripts/             # 【KubeJS】クライアント側スクリプト (.js)
+│   ├── JEI / REI の非表示設定
+│   ├── ツールチップ（説明文）の追加
+│   └── キー入力やクライアント描画イベント処理
+│
+├── server_scripts/             # 【KubeJS】サーバー側スクリプト (.js)
+│   ├── レシピの追加・削除・変更
+│   ├── 実績の動的生成 (event.addJson)
+│   ├── プレイヤーイベント（ログイン、死亡、移動など）
+│   ├── ブロック・アイテムの右クリックイベント
+│   └── ルートテーブルの制御
+│
+├── startup_scripts/            # 【KubeJS】起動時スクリプト (.js) ※要再起動
+│   ├── カスタムアイテムの新規登録
+│   ├── カスタムブロックの新規登録
+│   ├── カスタム液体の新規登録
+│   └── カスタム効果（ポーション効果）の新規登録
+│
+└── config/                     # KubeJS自体の設定ファイル (kubejs.json)
+
+```
+## 補足
+
+:::tip[サブフォルダによる整理について]
+`assets/` や `data/` 、各種スクリプトフォルダの内部は、さらに**サブフォルダを作って自由に整理・分割**できます。
+
+* **データパック / アセットの場合:**  
+  `kubejs/data/kubejs/advancements/chapter1/test.json` のように配置すると、IDは `kubejs:chapter1/test` になります。
+* **KubeJSスクリプトの場合:**  
+  `server_scripts/` 内にどれだけ深層フォルダを作って `.js` ファイルを分散させても、KubeJSがすべて自動で読み込んでくれます。大型Modpackでは機能や章ごとにフォルダ分けするのがおすすめです！
+:::

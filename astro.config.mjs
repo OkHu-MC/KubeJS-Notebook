@@ -17,6 +17,7 @@ export default defineConfig({
             { label: '環境構築 (CurseForge)', link: 'guides/setup/' },
             { label: 'Prism Launcher (任意)', link: 'guides/setup_pr/' },
             { label: 'Hello World (初回実行)', link: 'guides/helloworld/' },
+			{ label: 'ディレクトリ一覧', link: 'guides/directory/' },
 
           ],
         },
