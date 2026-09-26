@@ -17,7 +17,13 @@ import { Steps } from '@astrojs/starlight/components';
 ## 1. カスタムアイテムの追加
 
 ```javascript
- // startup_scripts/custom_items.js StartupEvents.registry('item', event => {   // レジストリID: kubejs:ruby   event.create('ruby')     .displayName('ルビー')     .texture('kubejs:item/ruby') // kubejs/assets/kubejs/textures/item/ruby.png を参照 })
+ // startup_scripts/custom_items.js
+ StartupEvents.registry('item', event => {
+     // レジストリID: kubejs:ruby
+        event.create('ruby')
+        .displayName('ルビー')
+        .texture('kubejs:item/ruby') // kubejs/assets/kubejs/textures/item/ruby.png を参照 
+        })
   ```
 
 ---
@@ -26,7 +32,16 @@ import { Steps } from '@astrojs/starlight/components';
 
 ```javascript
  // startup_scripts/custom_blocks.js 
- StartupEvents.registry('block', event => {   // レジストリID: kubejs:ruby_block   event.create('ruby_block')     .displayName('ルビーブロック')     .material('metal')     .hardness(5.0)     .resistance(6.0)     .requiresTool(true)     .tagBlock('mineable/pickaxe') // ツルハシで採掘可能     .tagBlock('needs_iron_tool')  // 鉄ツール適正 }) 
+ StartupEvents.registry('block', event => {   // レジストリID: kubejs:ruby_block   
+    event.create('ruby_block')
+    .displayName('ルビーブロック')     
+    .material('metal')     
+    .hardness(5.0) 
+    .resistance(6.0)
+    .requiresTool(true)     
+    .tagBlock('mineable/pickaxe') // ツルハシで採掘可能     
+    .tagBlock('needs_iron_tool')  // 鉄ツール適正 
+    }) 
 ```
 
 ---
