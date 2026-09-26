@@ -1,0 +1,337 @@
+---
+title: 実績の追加 (Startup Scripts)
+description: KubeJSを使った新しい実績の登録方法です。
+sidebar:
+  order: 7
+---
+import { Steps } from '@astrojs/starlight/components';
+
+要素の新規追加処理は、 `kubejs/server_scripts/` 配下で行います。
+
+ちなみにこのページの作者はここの学習にアホみたいに時間掛かりました…ので、  
+できるだけ網羅できるよう、細かく見ていきます
+
+---
+
+## 1. 基本構文(例文)
+
+
+いきなりクソ面倒な奴です。とりあえず例文を先に置いておきます。  
+なるべく耐えてくださいね。
+
+おそらく一番簡単なのは 「○○を入手する」系です
+```javascript
+ // server_scripts/custom_items.js
+ ServerEvents.highPriorityData(event => {
+  event.addJson('kubejs:advancements/<実績のファイル名>', {
+    display: {
+        icon: {
+            item: '<表示アイコンのアイテムID>'
+              },
+        title: {
+            text: '<タイトルテキスト>'
+              },
+        description: {
+            text: '<説明テキスト>'
+              },
+      
+        frame: '<task | goal | challenge>',
+        show_toast: true,
+        announce_to_chat: true,
+        hidden: false
+    },
+    parent: '<親実績のID>',
+    criteria: {
+      '<条件の任意識別名>': {
+        trigger: 'minecraft:inventory_changed',
+        conditions: {
+          items: [
+            {
+              items: ['<判定アイテムID>'],
+              count: {
+                min: <最小個数>
+              }
+            }
+          ]
+        }
+      }
+    }
+  })
+})
+  ```
+
+---
+
+## 2. 各パラメータの詳しい説明
+
+### display内のパラメータ
+| パラメータ名 | 内容 | 備考 |
+| :--- | :--- | :--- |
+| icon | 実績の確認画面で出すアイコンをここで指定する。| 実はnbt指定できるらしい |
+| item | 実績のアイコンとして何のアイテムを使うか指定する。自分で追加したアイテムでも問題ない | ポーションを指定する場合ちょっと面倒 |
+| nbt | 先程の基本構文では出てませんでしたが、このタグで色々弄れる。| nbt弄ってるスクリプトを見つけたら下の方で活用例を追記します。 |
+|  |  |  |
+| title | タイトルを指定します | descriptionと中のオプション同じなので省略 |
+| description | 実績の説明を指定します | Minecraftのテキスト成分（Text Component） に対応している |
+| text | 表示するプレーンテキストです。 | 文字列型は指定可能な一覧、boolの場合はデフォルトの方を\<\>で囲っています |
+| color | 色を変えます | 'red' , 'gold', '#FF00FF' 等 |
+| bold | 太字 | true/\<false\> |
+| italic | 斜体 | true/\<false\> |
+| underlined | 下線 |true/\<false\> |
+| strikethrough	| 打ち消し線 | true/\<false\> |
+| obfuscated | 難読化文字/ガラクタ文字 | true/\<false\> |
+| translate	| 言語ファイル（langファイル）のキー（多言語対応する場合に使用）| ちょっとややこしいので後述 |
+|  |  |  |
+| frame | フレームの見た目を変える | \<task\> / goal / challenge |
+| task | 基本的な見た目 | 一番よく使うことになりそう |
+| goal | ゴール用 | 序盤の終了辺りに作る機械とかに良さそう |
+| challenge | 紫のアレ | colorを指定しない時、紫になるはず |
+| show_toast | 右上に出るポップアップを出すかどうか | \<true\>/false |
+| announce_to_chat | マルチプレイ時に周りに知らせるか | \<true\>/false |
+| hidden | 隠し要素にするかどうか | true/\<false\> |
+
+---
+補足 :   
+text について  
+\n を使うことで改行できます  
+
+title/descriptionについて  
+```　  
+title : { text: "" }
+
+という書き方が基本ですが、
+title : [  
+  {text : "" ,color: "blue"}  
+  {text : "" ,color: "white"}  
+]  
+とかもできる。  
+```
+
+nbtについて
+```
+icon: {
+  item: 'minecraft:potion',
+  nbt: '{Potion:"minecraft:swiftness"}'
+}
+
+nbtだけで一ページ作れそうなので省略するが、「このポーションをアイコンにしたい」  
+とかで使うのが基本になりそう。
+
+```
+
+### parent (実績のファイル名についても補足)
+親実績のIDを指定する。  
+実績のファイル名として指定した文字列が親 #\hogepack/advancements/\<hogehoge\> の場合parent:'hogepack:hogehoge'  
+ちなみにデータパックだとhogehoge.json実体が必要(というかevent.addJsonの第二引数がまんまjsonの中身なので…)  
+だが、jsで全部書いている関係で、空ファイルを用意する必要はありません…便利!!! 
+ちなみに親の実績がデータパックの場合、hugahuga.json とかになっていると思いますが…この場合は.jsonまで必要です
+
+ちなみにフォルダを分けて管理することもできる  
+kubejs:chapter1/cobblestone とか
+
+
+
+
+---
+
+## 3. 実績達成条件の処理について(アイテム入手版)
+
+条件式は複数指定できます  
+(深層岩or焼石64) and ダイヤ1 所持して特定座標のネザー要塞の地下に行ってもらうスクリプトです
+悪魔ですね…
+
+---
+```javascript 
+ ServerEvents.highPriorityData(event => {
+  event.addJson('kubejs:advancements/fortress_architect_challenge', {
+    display: {
+      icon: { item: 'minecraft:diamond' },
+      title: { text: '要塞の建築家' },
+      description: { text: 'ダイヤ1個と（石64個 OR 深層岩64個）を持った状態で、ネザー要塞地下（Y=40以下）の特定範囲に到達する' },
+      frame: 'challenge'
+    },
+    parent: 'minecraft:nether/find_fortress',
+
+    criteria: {
+      // パターンA: ダイヤ1個 + 石64個 + ネザー要塞の地下座標
+      pattern_stone: {
+        trigger: 'minecraft:inventory_changed', // または location
+        conditions: {
+          // ① アイテム所持条件 (ダイヤ1 AND 石64)
+          items: [
+            { items: ['minecraft:diamond'], count: { min: 1 } },
+            { items: ['minecraft:stone'], count: { min: 64 } }
+          ],
+          // ② プレイヤーの位置条件
+          player: {
+            location: {
+              dimension: 'minecraft:the_nether',
+              structure: 'minecraft:fortress',
+              position: {
+                x: { min: 0 },
+                y: { max: 40 },
+                z: { min: 1000, max: 2000 }
+              }
+            }
+          }
+        }
+      },
+
+      // パターンB: ダイヤ1個 + 深層岩64個 + ネザー要塞の地下座標
+      pattern_deepslate: {
+        trigger: 'minecraft:inventory_changed',
+        conditions: {
+          // ① アイテム所持条件 (ダイヤ1 AND 深層岩64)
+          items: [
+            { items: ['minecraft:diamond'], count: { min: 1 } },
+            { items: ['minecraft:stone_deepslate'], count: { min: 64 } }
+          ],
+          // ② プレイヤーの位置条件（パターンAと同じ）
+          player: {
+            location: {
+              dimension: 'minecraft:the_nether',
+              structure: 'minecraft:fortress',
+              position: {
+                x: { min: 0 },
+                y: { max: 40 },
+                z: { min: 1000, max: 2000 }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    // パターンA（石ルート） または パターンB（深層岩ルート） のどちらか達成でクリア！
+    requirements: [
+      ['pattern_stone', 'pattern_deepslate']
+    ]
+  })
+})
+```
+## 4. 全部載せ
+
+```javascript
+// server_scripts/advancements_advanced.js
+
+ServerEvents.highPriorityData(event => {
+
+  event.addJson('kubejs:advancements/chapter1/ultimate_fortress_master', {
+    // ==========================================
+    // 1. display (見た目・表示設定)
+    // ==========================================
+    display: {
+      // アイコン（NBTでポーションの種類やダメージ値を指定可能）
+      icon: {
+        item: 'minecraft:potion',
+        nbt: '{Potion:"minecraft:strong_strength"}'
+      },
+
+      // タイトル（配列を使って部分ごとに色や装飾を変更）
+      title: [
+        { text: '【極致】', color: 'dark_purple', bold: true },
+        { text: 'ネザー要塞の覇王', color: 'gold', bold: true }
+      ],
+
+      // 説明文（\n で改行可能。改行後だけ色を変える等も自由）
+      description: [
+        { text: 'レベル100でネザー要塞地下に乗り込み、\n', color: 'yellow' },
+        { text: '原木と苗木を持った状態で、ウィザスケを弓で撃破する', color: 'gray', italic: true }
+      ],
+
+      frame: 'challenge',       // 'task' | 'goal' | 'challenge'
+      show_toast: true,         // 右上トースト通知を出すか
+      announce_to_chat: true,   // チャット欄へ全体通知するか
+      hidden: true              // 未達成時は進捗画面で隠す（隠し実績）
+    },
+
+    // ==========================================
+    // 2. parent (親実績のID指定)
+    // ==========================================
+    // ルート実績以外は必須。拡張子 .json は不要。
+    parent: 'minecraft:nether/find_fortress',
+
+    // ==========================================
+    // 3. criteria (達成条件の定義)
+    // ==========================================
+    criteria: {
+      // 条件1: ネザー要塞で特殊な撃破を行う（一瞬の同時成立アプローチ）
+      kill_wither_skeleton_challenge: {
+        trigger: 'minecraft:player_killed_entity', // トリガー: モブを倒した時
+        conditions: {
+          // A. 倒した対象の条件
+          entity: {
+            type: 'minecraft:wither_skeleton'
+          },
+
+          // B. トドメの刺し方（遠距離攻撃）
+          killing_blow: {
+            is_projectile: true
+          },
+
+          // C. プレイヤー本人の状態・環境（一瞬で同時に満たす必要がある条件）
+          player: {
+            // C-1. レベル条件 (min/maxで範囲指定)
+            level: {
+              min: 100,
+              max: 100
+            },
+
+            // C-2. プレイヤーの位置・環境条件
+            location: {
+              dimension: 'minecraft:the_nether',
+              structure: 'minecraft:fortress',
+              position: {
+                x: { min: -200, max: 200 },
+                y: { max: 50 },               // Y=50以下（地下）
+                z: { min: 1000, max: 2000 }
+              }
+            },
+
+            // C-3. プレイヤーの所持品条件（タグ '#' の使用 & AND指定）
+            inventory: {
+              items: [
+                { items: ['#minecraft:saplings'] }, // 任意の苗木
+                { items: ['#minecraft:logs'] }      // 任意の原木
+              ]
+            }
+          }
+        }
+      },
+
+      // 条件2: 時間差OKの追加条件（過去にエンダーマンの目を投げたことがあるか）
+      // ※ criteria 内に別トリガーを並べることで、「条件1 AND 条件2」になる
+      has_used_ender_eye: {
+        trigger: 'minecraft:used_ender_eye',
+        conditions: {}
+      }
+    },
+
+    // ==========================================
+    // 4. requirements (任意: 条件の論理結合制御)
+    // ==========================================
+    // 省略した場合は「すべての条件(AND)」になります。
+    // 以下のように書くと「(条件1 OR 条件2)」というOR判定を作ることもできます。
+    /*
+    requirements: [
+      ['kill_wither_skeleton_challenge'],
+      ['has_used_ender_eye']
+    ]
+    */
+  })
+
+})
+
+
+```
+
+
+
+
+
+
+
+
+
+
+---

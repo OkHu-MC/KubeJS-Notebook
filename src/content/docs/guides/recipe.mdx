@@ -21,13 +21,30 @@ import { Steps } from '@astrojs/starlight/components';
 ### ① 4マス（2x2）レシピ：深層岩の丸石からレバー
 
 ```javascript
- ServerEvents.recipes(event => {   event.shaped('minecraft:lever', [     'A',     'B'   ], {     A: 'minecraft:cobbled_deepslate',     B: 'minecraft:stick'   }) }) 
+ ServerEvents.recipes(event => {
+     event.shaped('minecraft:lever',
+        [     'A',     'B'   ],
+        {     
+          A: 'minecraft:cobbled_deepslate',     
+          B: 'minecraft:stick'
+        }
+      );
+  }) 
  ```
 
 ### ② 9マス（3x3）レシピ：深層岩からリピーター
 
 ```javascript
- ServerEvents.recipes(event => {   event.shaped('minecraft:repeater', [     'TRT',     'SSS'   ], {     T: 'minecraft:redstone_torch',     R: 'minecraft:redstone',     S: 'minecraft:deepslate'   }) })
+ ServerEvents.recipes(event => {
+    event.shaped('minecraft:repeater',
+       [     'TRT',     'SSS'   ],
+       {     
+            T: 'minecraft:redstone_torch',
+            R: 'minecraft:redstone',     
+            S: 'minecraft:deepslate'
+       }
+    )
+  })
   ```
 
 ---
@@ -39,5 +56,27 @@ import { Steps } from '@astrojs/starlight/components';
 ### ダイヤモンド2個 -> エメラルド1個
 
 ```javascript 
-ServerEvents.recipes(event => {   event.shapeless('minecraft:emerald', [     'minecraft:diamond',     'minecraft:diamond'   ]) }) 
+ServerEvents.recipes(event => {
+    event.shapeless('minecraft:emerald',
+            [
+               'minecraft:diamond',
+               'minecraft:diamond'   
+            ]
+        
+    )
+   }) 
+```
+---
+tips:
+```javascript
+ServerEvents.recipes(event => {})
+//これは一つで良い
+
+
+ServerEvents.recipes(event => {
+event.shapeless();
+event.shaped();
+//    :     中に幾つでも定義できる
+})
+
 ```

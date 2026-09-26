@@ -25,7 +25,8 @@ export default defineConfig({
 			items: [
 				{ label: 'レシピの追加', link: 'guides/recipe/' },
 				{ label: 'リソース・テクスチャの配置', link: 'guides/texture/' },
-				{ label: 'アイテムの追加', link: 'guides/custom_item/' }
+				{ label: 'アイテムの追加', link: 'guides/custom_item/' },
+				{ label: '実績の追加', link: 'guides/achievement/' }
 
 			]
 
